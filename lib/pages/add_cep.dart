@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:viacep_back4app/repositories/ViaCep_repository.dart';
 
 class AddCEP extends StatefulWidget {
   const AddCEP({super.key});
@@ -9,7 +10,17 @@ class AddCEP extends StatefulWidget {
 }
 
 class _AddCEPState extends State<AddCEP> {
+  var ViaCep = ViaCepRepository();
   TextEditingController cep = TextEditingController();
+  bool isLoading = false;
+  bool showDetails = false;
+  var resultCep;
+  String cepCard = "";
+  String logradouroCard = "";
+  String cidadeCard = "";
+  String bairroCard = "";
+  String ufCard = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,25 +42,40 @@ class _AddCEPState extends State<AddCEP> {
             ),
             TextButton(
                 onPressed: () async {
-                  var dio = Dio();
-                  var resultCep = await dio
-                      .get("https://viaCep.com.br/ws/${cep.text}/json/");
+                  resultCep = await ViaCep.getCep(cep.text);
                   print(resultCep);
+
+                  setState(() {
+                    showDetails = !showDetails;
+                    cepCard = resultCep['cep'];
+                    logradouroCard = resultCep['logradouro'];
+                    bairroCard = resultCep['bairro'];
+                    ufCard = resultCep['uf'];
+                    cidadeCard = resultCep['localidade'];
+                  });
                 },
                 child: Text(
                   "Consultar",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 )),
-            Container(
-              child: Card(
-                  child: Column(
-                children: [
-                  ListTile(
-                    title: Text("data"),
-                  )
-                ],
-              )),
-            )
+            showDetails
+                ? Container(
+                    child: Card(
+                        child: Column(
+                    children: [
+                      ListTile(
+                        title: Text('CEP: $cepCard'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                                "$logradouroCard, $bairroCard, $cidadeCard - $ufCard ")
+                          ],
+                        ),
+                      )
+                    ],
+                  )))
+                : Container()
           ],
         ),
       ),
