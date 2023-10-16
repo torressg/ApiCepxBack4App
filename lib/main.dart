@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:viacep_back4app/pages/add_cep.dart';
+import 'package:viacep_back4app/pages/cep_list.dart';
 import 'package:viacep_back4app/repositories/CEPsBack4App_repository.dart';
 
 void main() async {
@@ -12,17 +14,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: ElevatedButton(
-              onPressed: () async {
-                var results = await CEPsBack4AppRepository().get();
-                print(results.toJson());
-              },
-              child: Text("aa")),
-        ),
-      ),
-    );
+    return MaterialApp(home: AddCEP());
   }
 }

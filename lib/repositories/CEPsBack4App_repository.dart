@@ -6,9 +6,9 @@ class CEPsBack4AppRepository {
   String appId = (dotenv.env['APP_ID']).toString();
   String appKey = (dotenv.env['APP_KEY']).toString();
   String address = (dotenv.env['PARSE_ADDRESS']).toString();
+  var dio = Dio();
 
-  Future<CEPsBack4AppModel> get() async {
-    var dio = Dio();
+  Future<CEPsBack4AppModel> getCEPs() async {
     dio.options.headers = {
       "X-Parse-Application-Id": appId,
       "X-Parse-REST-API-Key": appKey,
@@ -16,12 +16,25 @@ class CEPsBack4AppRepository {
     };
 
     try {
-      var result = await dio.get(address);
-      return CEPsBack4AppModel.fromJson(result.data);
+      var results = await dio.get(address);
+      return CEPsBack4AppModel.fromJson(results.data);
     } catch (e) {
       print("Erro: ${e}");
-      print("Erro: ${appId}");
+
       throw e;
+    }
+  }
+
+  Future<void> addCEP(CEPsBack4AppModel cepsBack4AppModel) async {
+    dio.options.headers = {
+      "X-Parse-Application-Id": appId,
+      "X-Parse-REST-API-Key": appKey,
+      "Content-Type": "application/json"
+    };
+    try {
+      await dio.post(address, data: cepsBack4AppModel.toJson());
+    } catch (e) {
+      print("Erro: ${e}");
     }
   }
 }
