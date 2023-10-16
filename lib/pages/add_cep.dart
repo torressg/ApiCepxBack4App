@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:viacep_back4app/models/CEPsBack4App_model.dart';
+import 'package:viacep_back4app/repositories/CEPsBack4App_repository.dart';
 import 'package:viacep_back4app/repositories/ViaCep_repository.dart';
 
 class AddCEP extends StatefulWidget {
@@ -10,6 +12,7 @@ class AddCEP extends StatefulWidget {
 }
 
 class _AddCEPState extends State<AddCEP> {
+  var CepRepository = CEPsBack4AppRepository();
   var ViaCep = ViaCepRepository();
   TextEditingController cep = TextEditingController();
   bool isLoading = false;
@@ -42,40 +45,56 @@ class _AddCEPState extends State<AddCEP> {
             ),
             TextButton(
                 onPressed: () async {
+                  setState(() {
+                    isLoading = !isLoading;
+                  });
                   resultCep = await ViaCep.getCep(cep.text);
-                  print(resultCep);
 
                   setState(() {
-                    showDetails = !showDetails;
-                    cepCard = resultCep['cep'];
+                    showDetails = true;
+                    cepCard = (resultCep['cep']);
                     logradouroCard = resultCep['logradouro'];
                     bairroCard = resultCep['bairro'];
                     ufCard = resultCep['uf'];
                     cidadeCard = resultCep['localidade'];
+                    isLoading = !isLoading;
                   });
                 },
                 child: Text(
                   "Consultar",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 )),
-            showDetails
-                ? Container(
-                    child: Card(
+            isLoading
+                ? CircularProgressIndicator()
+                : showDetails
+                    ? Container(
+                        child: Card(
                         child: Column(
-                    children: [
-                      ListTile(
-                        title: Text('CEP: $cepCard'),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            ListTile(
+                              title: Text('CEP: $cepCard'),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      "$logradouroCard, $bairroCard, $cidadeCard - $ufCard "),
+                                ],
+                              ),
+                            ),
                             Text(
-                                "$logradouroCard, $bairroCard, $cidadeCard - $ufCard ")
+                              "Deseja cadastrar a sua lista de CEPs?",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            TextButton(
+                                onPressed: () async {
+                                  await CepRepository.addCEP(
+                                      cepCard, bairroCard, cidadeCard, ufCard);
+                                },
+                                child: Text('Sim'))
                           ],
                         ),
-                      )
-                    ],
-                  )))
-                : Container()
+                      ))
+                    : Container()
           ],
         ),
       ),

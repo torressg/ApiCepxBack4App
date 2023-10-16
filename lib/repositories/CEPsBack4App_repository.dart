@@ -25,14 +25,21 @@ class CEPsBack4AppRepository {
     }
   }
 
-  Future<void> addCEP(CEPsBack4AppModel cepsBack4AppModel) async {
+  Future<void> addCEP(
+      String numeroCep, String bairro, String cidade, String estado) async {
     dio.options.headers = {
       "X-Parse-Application-Id": appId,
       "X-Parse-REST-API-Key": appKey,
       "Content-Type": "application/json"
     };
+    var dataToSend = {
+      'Numero_Cep': numeroCep,
+      'Bairro': bairro,
+      'Cidade': cidade,
+      'Estado': estado
+    };
     try {
-      await dio.post(address, data: cepsBack4AppModel.toJson());
+      await dio.post(address, data: dataToSend);
     } catch (e) {
       print("Erro: ${e}");
     }

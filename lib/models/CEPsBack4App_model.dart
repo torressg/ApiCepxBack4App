@@ -1,7 +1,7 @@
 class CEPsBack4AppModel {
   List<CEPs> results = [];
 
-  CEPsBack4AppModel(this.results);
+  CEPsBack4AppModel({required numeroCep, required bairro, required cidade});
 
   CEPsBack4AppModel.fromJson(Map<String, dynamic> json) {
     if (json['results'] != null) {
