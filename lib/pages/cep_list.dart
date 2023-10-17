@@ -34,20 +34,19 @@ class _CEPListState extends State<CEPList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('CEPs cadastrados'),
+        title: const Text('CEPs cadastrados'),
       ),
-      body: Container(
-          child: ListView.builder(
-              itemCount: lenghtContactList,
-              itemBuilder: (BuildContext context, index) {
-                return ListTile(
-                  leading: Icon(Icons.location_on),
-                  title: Text(titleCEP[index]),
-                  subtitle: Text(subTitleCEP[index]),
-                  trailing: Text("teste"),
-                  onTap: () {},
-                );
-              })),
+      body: ListView.builder(
+          itemCount: lenghtContactList,
+          itemBuilder: (BuildContext context, index) {
+            return ListTile(
+              leading: const Icon(Icons.location_on, size: 35),
+              title: Text(titleCEP[index]),
+              subtitle: Text(subTitleCEP[index]),
+              trailing: IconButton(onPressed: () {}, icon: Icon(Icons.pending)),
+              onTap: () {},
+            );
+          }),
     );
   }
 }

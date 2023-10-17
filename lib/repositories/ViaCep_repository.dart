@@ -1,6 +1,6 @@
-import 'package:viacep_back4app/models/CEPsBack4App_model.dart';
+// ignore_for_file: avoid_print
+
 import 'package:dio/dio.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ViaCepRepository {
   var dio = Dio();
@@ -10,8 +10,8 @@ class ViaCepRepository {
       var result = await dio.get("https://viaCep.com.br/ws/$cep/json/");
       return result.data;
     } catch (e) {
-      print("Erro: ${e}");
-      throw e;
+      print("Erro: $e");
+      rethrow;
     }
   }
 }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:viacep_back4app/pages/add_cep.dart';
-import 'package:viacep_back4app/pages/cep_list.dart';
-import 'package:viacep_back4app/repositories/CEPsBack4App_repository.dart';
+import 'package:viacep_back4app/pages/home_page.dart';
 
 void main() async {
   await dotenv.load(fileName: "lib/constants/.env");
@@ -14,6 +12,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: AddCEP());
+    return MaterialApp(
+        theme: ThemeData(primarySwatch: Colors.deepPurple),
+        home: const HomePage());
   }
 }
